@@ -179,7 +179,30 @@ struct BST
 
       else //node has two children
       {
-        TreeNode<T> *successor = getSuccessor(current); //find successor of the node to be deleted (in this case: current)
+        //TreeNode<T> *successor = getSuccessor(current); //find successor of the node to be deleted (in this case: current)
+
+
+        // I commented out the use of getSuccessor ^ and implemented its code below between the slashes
+
+        //////////////////////////////////////////////
+        TreeNode<T> *d = current;
+        TreeNode<T> *sp = d; //successors parent
+        TreeNode<T> *successor = d;
+        TreeNode<T> *currentX = d->right;
+
+        while(currentX != NULL)
+        {
+          sp = successor;
+          successor = currentX;
+          currentX = currentX->left;
+        }
+
+        if(successor != d->right)
+        {
+          sp->left = successor->right;
+          successor->right = d->right;
+        }
+        //////////////////////////////////////////////////
 
         if(current == root)
           root = successor;
