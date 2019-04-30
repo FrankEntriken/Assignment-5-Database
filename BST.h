@@ -4,7 +4,8 @@
 using namespace std;
 
 template <class T>
-struct BST{
+struct BST
+{
   public:
     TreeNode<T> *root;
 
@@ -215,6 +216,6 @@ struct BST{
         sp->left = successor->right;
         successor->right = d->right;
       }
-      return successor;
+      return *successor;
     }
 };

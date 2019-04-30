@@ -17,7 +17,6 @@ main()
   bst.recPrint(bst.root);
 
   cout << "REMOVE 8" << endl;
-  bst.remove(8);
+  bst.remove(10);
   bst.recPrint(bst.root);
-
 }
