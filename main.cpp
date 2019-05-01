@@ -94,7 +94,7 @@ main()
 
   Database d = Database();
 
-  d.sBST.insert(Student(2297510, "Student A", "Freshman", "Business", 2.9, 0000005));
+  d.sBST.insert(Student(2297510, "Student A", "Freshman", "Business", 2.9, 2297990));
   d.sBST.insert(Student(2297598, "Student B", "Freshman", "English", 3.6, 0000005));
   d.sBST.insert(Student(2297508, "Student C", "Freshman", "Undecided", 2.3, 0000006));
   d.sBST.insert(Student(2297507, "Student D", "Sophmore", "Comp Sci", 3.4, 0000006));
@@ -121,4 +121,17 @@ main()
   cout << endl;
   d.displayFaculty(2297356);
 
+  cout << "5. Display Advisor" << endl;
+  d.displayAdvisor(2297510);
+
+  //cout << "6. Display Advisees" << endl;
+  //d.displayAdvisees(2297356);
+
+  cout << "7. Add Student" << endl;
+  //d.printStudents();
+  //d.addStudent();
+  //d.printStudents();
+  d.printFaculty();
+  d.addFaculty();
+  d.printFaculty();
 }

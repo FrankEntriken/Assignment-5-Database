@@ -2,6 +2,7 @@
 #include "BST.h"
 #include "Student.h"
 #include "Faculty.h"
+//#include "DoublyLinkedList.h"
 
 using namespace std;
 
@@ -53,37 +54,105 @@ class Database
     //------------------- 5 -------------------
     void displayAdvisor(int id)
     {
-
+      Student x = Student(id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000);
+      if(sBST.contains(x))
+      {
+        int advisor = sBST.retrieve(x).advisor;
+        displayFaculty(advisor);
+      }
+      else
+        cout << " Student " << id << " is not in our database." << endl;
     }
 
     //------------------- 6 -------------------
     void displayAdvisees(int id)
     {
-
+      Faculty x = Faculty(id, "irrelevant", "irrelevant", "irrelevant", DoublyLinkedList());
+      DoublyLinkedList advisees;
+      if(fBST.contains(x))
+      {
+        advisees = fBST.retrieve(x).advisees;
+        ListNode *ptr = advisees.front;
+        while(ptr != NULL)
+        {
+          displayStudent(ptr->data);
+          ptr = ptr -> next;
+        }
+      }
+      else
+        cout << " Faculty member " << id << " is not in our database." << endl;
     }
 
     //------------------- 7 -------------------
-    void addStudent(const Student& s)
+    void addStudent()
     {
+      int id;
+      string name;
+      string grade;
+      string major;
+      double gpa;
+      int advisor;
 
+      cout << "ADD NEW STUDENT" << endl;
+      cout << "What is the student's id? ... ";
+      cin >> id;
+      cout << "What is the student's name? ... "; //typing first name and last name ("Jon Apple") will skip the next cin (grade)
+      cin >> name;
+      cout << "What is the student's grade? ... ";
+      getline(cin, grade);
+      cout << "What is the student's major? ... ";
+      cin >> major;
+      cout << "What is the student's gpa? ... ";
+      cin >> gpa;
+      cout << "What is the id number of the student's advisor? ... ";
+      cin >> advisor;
+
+      sBST.insert(Student(id, name, grade, major, gpa, advisor));
+      cout << "Student has been successfully added" << endl;
     }
 
     //------------------- 8 -------------------
     void deleteStudent(int id)
     {
-
+      Student x = Student(id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000);
+      sBST.remove(x);
     }
 
     //------------------- 9 -------------------
-    void addFaculty(const Faculty& f)
+    void addFaculty()
     {
+      int id;
+      string name;
+      string level;
+      string department;
+      DoublyLinkedList advisees;
+      int advisee;
 
+      cout << "ADD NEW FACULTY" << endl;
+      cout << "What is the faculty's id? ... ";
+      cin >> id;
+      cout << "What is the faculty's name? ... ";
+      cin >> name;
+      cout << "What is the faculty's level? ... ";
+      cin >> level;
+      cout << "What is the faculty's department? ... ";
+      cin >> department;
+      cout << "Enter the id's of this advisor's advisees one at a time" << endl;
+      cout << "If you are finished entering advisees, enter any letter to finish ... ";
+      while(cin >> advisee)
+      {
+        advisees.insertFront(advisee);
+        cout << "Enter another id or type any letter to finish ... ";
+      }
+      fBST.insert(Faculty(id, name, level, department, advisees));
+      cout << "Faculty has been successfully added" << endl;
     }
 
     //------------------- 10 -------------------
     void deleteFaculty(int id)
     {
-
+      Faculty x = (Faculty(id, "irrelevant", "irrelevant", "irrelevant", DoublyLinkedList()));
+      fBST.remove(x);
     }
 
 
