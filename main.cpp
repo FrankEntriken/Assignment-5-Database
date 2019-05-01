@@ -63,7 +63,7 @@ main()
   bst.insert(Faculty(2297990, "Faculty D", "Professor", "Law School", DoublyLinkedList()));
   bst.insert(Faculty(2297586, "Faculty E", "Professor", "Art School", DoublyLinkedList()));
   bst.insert(Faculty(2297293, "Faculty F", "Professor", "Education Department", DoublyLinkedList()));
-  bst.insert(Faculty(2297444, "Faculty G", "Department Head", "Science Dpeartment", DoublyLinkedList()));
+  bst.insert(Faculty(2297444, "Faculty G", "Department Head", "Science Department", DoublyLinkedList()));
   bst.insert(Faculty(2297600, "Faculty H", "Department Head", "Business School", DoublyLinkedList()));
   bst.recPrint(bst.root);
 
@@ -85,4 +85,6 @@ main()
   bst.insert(a);
   bst.recPrint(bst.root);
 
+  cout << "SEARCH" << endl;
+  bst.search(2297832);
 }

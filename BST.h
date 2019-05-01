@@ -241,4 +241,26 @@ struct BST
       }
       return *successor;
     }
+
+    //--------------------------------------------------------------------------------
+    int search(int id)
+    {
+      if(isEmpty())
+        return false;
+      else
+      {
+        TreeNode<T> *current = root;
+        while(current->id != id)
+        {
+          if(id < current->id) //go left
+            current = current->left;
+          else
+            current = current->right;
+
+          if(current == NULL) //we did not find it, does not exist
+            return false;
+        }
+      }
+      return true;
+    }
 };
