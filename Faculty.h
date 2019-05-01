@@ -1,9 +1,8 @@
 #include <iostream>
-#include <list>
+#include "DoublyLinkedList.h"
 
 using namespace std;
 
-template <class T>
 struct Faculty
 {
   public:
@@ -11,15 +10,57 @@ struct Faculty
     string name;
     string level;
     string department;
-    list<int> advisee;
+    DoublyLinkedList advisees;
 
-    Faculty(string id_, string name_, string level_, string department_, list<int> advisee_)
+    // == overload
+    friend bool operator==(const Faculty& faculty1, const Faculty& faculty2)
+    {
+      return (faculty1.id == faculty2.id);
+    }
+
+    // != overload
+    friend bool operator!=(const Faculty& faculty1, const Faculty& faculty2)
+    {
+      return (faculty1.id != faculty2.id);
+    }
+
+    // < overload
+    friend bool operator<(const Faculty& faculty1, const Faculty& faculty2)
+    {
+      return (faculty1.id < faculty2.id);
+    }
+
+    // > overload
+    friend bool operator>(const Faculty& faculty1, const Faculty& faculty2)
+    {
+      return (faculty1.id > faculty2.id);
+    }
+
+    // >> overload (for printing a faculty member's data)
+    friend ostream& operator<<(ostream& os, const Faculty& f)
+    {
+      os << f.id << ", " << f.name << " | " << f.level << " of the " << f.department;
+      return os;
+    }
+
+    // constructor
+    Faculty(int id_, string name_, string level_, string department_, DoublyLinkedList advisees_)
     {
       id = id_;
       name = name_;
       level = level_;
       department = department_;
-      advisee = advisee_;
+      advisees = advisees_; // rather that take a list as an argument, a list will be created and can be added to using setAdvisees()
+    }
+
+    // default constructor
+    Faculty()
+    {
+      id = 0;
+      name = "Unknown";
+      level = "Unknown";
+      department = "Unknown";
+      advisees = DoublyLinkedList();
     }
 
     ~Faculty()
@@ -72,13 +113,13 @@ struct Faculty
     }
 
     //--------------------------------------------------------------------------------
-    list<int> getAdvisee()
+    DoublyLinkedList getAdvisees()
     {
-      return advisee;
+      return advisees;
     }
 
-    void setAdvisee(int a)
+    void setAdvisees(int a)
     {
-      advisee = a;
+      advisees.insertFront(a);
     }
 };

@@ -2,23 +2,67 @@
 
 using namespace std;
 
-template <class T>
 struct Student
 {
   public:
     int id;
+    string name;
     string grade;
     string major;
     double gpa;
     int advisor;
 
-    Student(string id_, string grade_, string major_, double gpa_, int advisor_)
+    // == overload
+    friend bool operator==(const Student& student1, const Student& student2)
+    {
+      return (student1.id == student2.id);
+    }
+
+    // != overload
+    friend bool operator!=(const Student& student1, const Student& student2)
+    {
+      return (student1.id != student2.id);
+    }
+
+    // < overload
+    friend bool operator<(const Student& student1, const Student& student2)
+    {
+      return (student1.id < student2.id);
+    }
+
+    // > overload
+    friend bool operator>(const Student& student1, const Student& student2)
+    {
+      return (student1.id > student2.id);
+    }
+
+    // >> overload (for printing a students data)
+    friend ostream& operator<<(ostream& os, const Student& s)
+    {
+      os << s.id << ", " << s.name << " | " << s.grade << " " << s.major << " major | GPA: " << s.gpa << " | Advisor ID: " << s.advisor;
+      return os;
+    }
+
+    // constructor
+    Student(int id_, string name_, string grade_, string major_, double gpa_, int advisor_)
     {
       id = id_;
+      name = name_;
       grade = grade_;
       major = major_;
       gpa = gpa_;
       advisor = advisor_;
+    }
+
+    // default constructor
+    Student()
+    {
+      id = 0;
+      name = "Unknown";
+      grade = "Unknown";
+      major = "Unknown";
+      gpa = 0.0;
+      advisor = 0;
     }
 
     ~Student()
@@ -35,6 +79,17 @@ struct Student
     void setId(int i)
     {
       id = i;
+    }
+
+    //--------------------------------------------------------------------------------
+    string getName()
+    {
+      return name;
+    }
+
+    void setName(string n)
+    {
+      name = n;
     }
 
     //--------------------------------------------------------------------------------
