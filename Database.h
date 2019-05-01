@@ -8,8 +8,14 @@ using namespace std;
 class Database
 {
   public:
-    BST<int> sBST;
-    BST<int> fBST;
+    BST<Student> sBST;
+    BST<Faculty> fBST;
+
+    Database()
+    {
+      sBST = BST<Student>();
+      fBST = BST<Faculty>();
+    }
 
 
     //------------------- 1 -------------------
@@ -27,13 +33,21 @@ class Database
     //------------------- 3 -------------------
     void displayStudent(int id)
     {
-
+      Student x = Student(id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000);
+      if(sBST.contains(x))
+        cout << sBST.retrieve(x) << endl;
+      else
+        cout << " Student " << id << " is not in our database." << endl;
     }
 
     //------------------- 4 -------------------
     void displayFaculty(int id)
     {
-
+      Faculty x = Faculty(id, "irrelevant", "irrelevant", "irrelevant", DoublyLinkedList());
+      if(fBST.contains(x))
+        cout << fBST.retrieve(x) << endl;
+      else
+        cout << " Faculty member " << id << " is not in our database." << endl;
     }
 
     //------------------- 5 -------------------
@@ -92,7 +106,7 @@ class Database
     }
 
     //------------------- 14 -------------------
-    void exit()
+    void exitProgram()
     {
       cout << "Exiting Program" << endl;
       exit(0);

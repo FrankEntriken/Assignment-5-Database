@@ -243,24 +243,31 @@ struct BST
     }
 
     //--------------------------------------------------------------------------------
-    int search(int id)
+    // retrieves an object in the tree, only use if you know the object is in the tree
+    T retrieve(T value)
     {
       if(isEmpty())
-        return false;
+      {
+        cout << "Object was not found" << endl;
+        return T();
+      }
       else
       {
         TreeNode<T> *current = root;
-        while(current->id != id)
+        while(current->data != value)
         {
-          if(id < current->id) //go left
+          if(value < current->data) //go left
             current = current->left;
           else
             current = current->right;
 
           if(current == NULL) //we did not find it, does not exist
-            return false;
+          {
+            cout << "Object was not found" << endl;
+            return T();
+          }
         }
+        return current->data;
       }
-      return true;
     }
 };
