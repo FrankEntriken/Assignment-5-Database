@@ -10,6 +10,19 @@ class DoublyLinkedList
     ListNode *back;
     unsigned int size;
 
+    // >> overload
+    friend ostream& operator<<(ostream& os, const DoublyLinkedList& d)
+    {
+      ListNode *curr = d.front;
+
+      while(curr != NULL)
+      {
+        os << "|" << curr -> data;
+        curr = curr -> next;
+      }
+      return os;
+    }
+
     DoublyLinkedList()
     {
       front = new ListNode();

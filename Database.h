@@ -3,6 +3,7 @@
 #include "Student.h"
 #include "Faculty.h"
 #include<limits>
+#include <fstream>
 
 using namespace std;
 
@@ -12,10 +13,31 @@ class Database
     BST<Student> sBST;
     BST<Faculty> fBST;
 
+    BST<Student> prev_sBST_1;
+    BST<Student> prev_sBST_2;
+    BST<Student> prev_sBST_3;
+    BST<Student> prev_sBST_4;
+    BST<Student> prev_sBST_5;
+    BST<Faculty> prev_fBST_1;
+    BST<Faculty> prev_fBST_2;
+    BST<Faculty> prev_fBST_3;
+    BST<Faculty> prev_fBST_4;
+    BST<Faculty> prev_fBST_5;
+
     Database()
     {
       sBST = BST<Student>();
       fBST = BST<Faculty>();
+      prev_sBST_1 = BST<Student>();
+      prev_sBST_2 = BST<Student>();
+      prev_sBST_3 = BST<Student>();
+      prev_sBST_4 = BST<Student>();
+      prev_sBST_5 = BST<Student>();
+      prev_fBST_1 = BST<Faculty>();
+      prev_fBST_2 = BST<Faculty>();
+      prev_fBST_3 = BST<Faculty>();
+      prev_fBST_4 = BST<Faculty>();
+      prev_fBST_5 = BST<Faculty>();
     }
 
     //------------------- 1 -------------------
@@ -92,6 +114,8 @@ class Database
       double gpa;
       int advisor;
 
+      save();
+
       cout << "ADD NEW STUDENT" << endl;
       cout << "What is the student's id? ... ";
       cin >> id;
@@ -122,6 +146,7 @@ class Database
       Student x = Student(id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000);
       if(sBST.contains(x))
       {
+        save();
         sBST.remove(Student(id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000));
       }
       else
@@ -139,6 +164,8 @@ class Database
       string department;
       DoublyLinkedList advisees;
       int advisee;
+
+      save();
 
       cout << "ADD NEW FACULTY" << endl;
       cout << "What is the faculty's id? ... ";
@@ -169,6 +196,7 @@ class Database
       Faculty x = (Faculty(id, "irrelevant", "irrelevant", "irrelevant", DoublyLinkedList()));
       if(fBST.contains(x))
       {
+        save();
         fBST.remove(x);
       }
       else
@@ -183,6 +211,7 @@ class Database
       Student a = Student(student_id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000);
       if(sBST.contains(a))
       {
+        save();
         Student x = Student(sBST.retrieve(a).id, sBST.retrieve(a).name, sBST.retrieve(a).grade, sBST.retrieve(a).major, sBST.retrieve(a).gpa, faculty_id);
         sBST.remove(a);
         sBST.insert(x);
@@ -202,6 +231,7 @@ class Database
 
       if(sBST.contains(a) && fBST.contains(b))
       {
+        save();
         advisees = fBST.retrieve(b).advisees;
         advisees.deleteNode(student_id);
         Faculty x = Faculty(fBST.retrieve(b).id, fBST.retrieve(b).name, fBST.retrieve(b).level, fBST.retrieve(b).department, advisees);
@@ -225,14 +255,194 @@ class Database
     //------------------- 13 -------------------
     void rollback()
     {
-      cout << "not implemented" << endl;
+      // set sBST and fBST to their most recent previous versions
+      sBST = prev_sBST_1;
+      fBST = prev_fBST_1;
 
-      /*
-      Create a list that is written to whenever a change happens
-      Functions that can be rolled back: 7-12
-      Whenever these functions run, they insert to a stack
-      Pop stack and see what the last change was to revert
-      */
+      // rotate all previous BSTs forward
+      prev_sBST_1 = prev_sBST_2;
+      prev_sBST_2 = prev_sBST_3;
+      prev_sBST_3 = prev_sBST_4;
+      prev_sBST_4 = prev_sBST_5;
+
+      prev_fBST_1 = prev_fBST_2;
+      prev_fBST_2 = prev_fBST_3;
+      prev_fBST_3 = prev_fBST_4;
+      prev_fBST_4 = prev_fBST_5;
+    }
+
+    void save()
+    {
+      // save current as prev_sBST_1 and rotate all down, deleting memory of prev_sBST_5
+      prev_sBST_5 = prev_sBST_4;
+      prev_sBST_4 = prev_sBST_3;
+      prev_sBST_3 = prev_sBST_2;
+      prev_sBST_2 = prev_sBST_1;
+      prev_sBST_1 = sBST;
+
+      // save current as prev_fBST_1 and rotate all down, deleting memory of prev_fBST_5
+      prev_fBST_5 = prev_fBST_4;
+      prev_fBST_4 = prev_fBST_3;
+      prev_fBST_3 = prev_fBST_2;
+      prev_fBST_2 = prev_fBST_1;
+      prev_fBST_1 = fBST;
+    }
+
+    void readFile()
+    {
+    	string line;
+      string delimiter = "|";
+    	ifstream myfile ("studentTable.txt");
+      Student x = Student();
+      size_t pos = 0;
+      string token;
+      int counter = 0;
+
+      if(myfile.is_open())
+      {
+        while( getline (myfile,line) )
+        {
+          while((pos = line.find(delimiter)) != std::string::npos)
+          {
+              token = line.substr(0, pos);
+              if(counter == 0)
+              {
+                // id number
+                x.id = stoi(token);
+              }
+              else if(counter == 1)
+              {
+                // name
+                x.name = token;
+              }
+              else if(counter == 2)
+              {
+                // grade
+                x.grade = token;
+              }
+              else if(counter == 3)
+              {
+                // major
+                x.major = token;
+              }
+              else if(counter == 4)
+              {
+                // gpa
+                x.gpa = stod(token);
+              }
+              line.erase(0, pos + delimiter.length());
+              counter ++;
+          }
+          // advisor
+          x.advisor = stoi(line);
+          counter = 0;
+
+          // add student x
+          sBST.insert(x);
+    		}
+    		myfile.close();
+    	}
+
+      ifstream myfile2 ("facultyTable.txt");
+      Faculty y = Faculty();
+
+      if(myfile2.is_open())
+      {
+        while( getline (myfile2,line) )
+        {
+          while((pos = line.find(delimiter)) != std::string::npos)
+          {
+              token = line.substr(0, pos);
+              if(counter == 0)
+              {
+                // id number
+                y.id = stoi(token);
+              }
+              else if(counter == 1)
+              {
+                // name
+                y.name = token;
+              }
+              else if(counter == 2)
+              {
+                // level
+                y.level = token;
+              }
+              else if(counter == 3)
+              {
+                // department
+                y.department = token;
+              }
+              else
+              {
+                // advisees
+                y.advisees.insertFront(stoi(token));
+              }
+              line.erase(0, pos + delimiter.length());
+              counter ++;
+          }
+          // remaining advisee
+          y.advisees.insertFront(stoi(line));
+          counter = 0;
+
+          // add faculty member y
+          fBST.insert(y);
+    		}
+    		myfile2.close();
+    	}
+    }
+
+    void clearFiles()
+    {
+      std::ofstream myfile;
+      myfile.open("studentTable.txt", std::ofstream::out | std::ofstream::trunc);
+      myfile.open("facultyTable.txt", std::ofstream::out | std::ofstream::trunc);
+    }
+
+    /*void writeFile()
+    {
+      std::ofstream myfile;
+      myfile.open("studentTable.txt", std::ofstream::out | std::ofstream::trunc);
+      if (myfile.is_open())
+      {
+
+      }
+      myfile.close();
+    }*/
+    void recWriteFileS(TreeNode<Student> *node)
+    {
+      if(node == NULL)
+        return;
+
+      recWriteFileS(node->left);
+
+      std::ofstream myfile;
+      myfile.open("studentTable.txt", std::ofstream::app);
+      if (myfile.is_open())
+      {
+        myfile << (node->data).id << "|" << (node->data).name << "|" << (node->data).grade << "|" << (node->data).major << "|" << (node->data).gpa << "|" << (node->data).advisor << "\n";
+      }
+      myfile.close();
+
+      recWriteFileS(node->right);
+    }
+
+    void recWriteFileF(TreeNode<Faculty> *node)
+    {
+      if(node == NULL)
+        return;
+
+      recWriteFileF(node->left);
+
+      std::ofstream myfile;
+      myfile.open("facultyTable.txt", std::ofstream::app);
+      if (myfile.is_open())
+      {
+        myfile << (node->data).id << "|" << (node->data).name << "|" << (node->data).level << "|" << (node->data).department << (node->data).advisees << "\n";
+      }
+      myfile.close();
+
+      recWriteFileF(node->right);
     }
 
     //------------------- 14 -------------------
@@ -240,6 +450,9 @@ class Database
     {
 
       //write to file
+      clearFiles();
+      recWriteFileS(sBST.root);
+      recWriteFileF(fBST.root);
 
       cout << "Exiting Program" << endl;
       exit(0);
@@ -250,6 +463,9 @@ class Database
     {
 
       //read from file and create BST
+      readFile();
+      //save();
+
 
       int response;
       int id;
@@ -348,7 +564,7 @@ class Database
         }
         if(response == 13)
         {
-          cout << "Not yet implemented" << endl;
+          rollback();
         }
         if(response == 14)
         {
