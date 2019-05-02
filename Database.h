@@ -1,3 +1,11 @@
+/*
+Grady Lynch and Frank Entriken
+Student ID: 2297574 and 2298368
+Emails: grlynch@chapman.edu and entriken@chapman.edu
+CPSC 350-01
+Assignment 5 - Database
+*/
+
 #include <iostream>
 #include "BST.h"
 #include "Student.h"
@@ -10,9 +18,11 @@ using namespace std;
 class Database
 {
   public:
+    //Binary Search Trees of Students and Faculty
     BST<Student> sBST;
     BST<Faculty> fBST;
 
+    //Versions of BST used for saving states
     BST<Student> prev_sBST_1;
     BST<Student> prev_sBST_2;
     BST<Student> prev_sBST_3;
@@ -41,18 +51,21 @@ class Database
     }
 
     //------------------- 1 -------------------
+    //Prints all student information
     void printStudents()
     {
       sBST.recPrint(sBST.root);
     }
 
     //------------------- 2 -------------------
+    //Prints all faculty information
     void printFaculty()
     {
       fBST.recPrint(fBST.root);
     }
 
     //------------------- 3 -------------------
+    //Prints student information based on given id
     void displayStudent(int id)
     {
       Student x = Student(id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000);
@@ -63,6 +76,7 @@ class Database
     }
 
     //------------------- 4 -------------------
+    //Prints faculty information based on given id
     void displayFaculty(int id)
     {
       Faculty x = Faculty(id, "irrelevant", "irrelevant", "irrelevant", DoublyLinkedList());
@@ -73,6 +87,7 @@ class Database
     }
 
     //------------------- 5 -------------------
+    //Prints student's advisor based on student id
     void displayAdvisor(int id)
     {
       Student x = Student(id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000);
@@ -86,6 +101,7 @@ class Database
     }
 
     //------------------- 6 -------------------
+    //Prints advisor's advisees based on faculty id
     void displayAdvisees(int id)
     {
       Faculty x = Faculty(id, "irrelevant", "irrelevant", "irrelevant", DoublyLinkedList());
@@ -105,6 +121,7 @@ class Database
     }
 
     //------------------- 7 -------------------
+    //Adds student to BST
     void addStudent()
     {
       int id;
@@ -114,13 +131,11 @@ class Database
       double gpa;
       int advisor;
 
-      save();
-
       cout << "ADD NEW STUDENT" << endl;
       cout << "What is the student's id? ... ";
       cin >> id;
       cin.clear();
-      cout << "What is the student's name? ... "; //typing first name and last name ("Jon Apple") will skip the next cin (grade)
+      cout << "What is the student's name? ... ";
       cin.ignore();
       getline(cin, name);
       cout << "What is the student's grade? ... ";
@@ -133,14 +148,29 @@ class Database
       cout << "What is the id number of the student's advisor? ... ";
       cin >> advisor;
 
-      sBST.insert(Student(id, name, grade, major, gpa, advisor));
-      Faculty x = (Faculty(advisor, "irrelevant", "irrelevant", "irrelevant", DoublyLinkedList()));
-      fBST.retrieve(x).advisees.insertFront(id);
-
-      cout << "Student has been successfully added" << endl;
+      Student x = Student(id, name, grade, major, gpa, advisor);
+      Faculty y = (Faculty(advisor, "irrelevant", "irrelevant", "irrelevant", DoublyLinkedList()));
+      if(sBST.contains(x))
+      {
+        cout << "\nStudent with id: " << id << " already exists!" << endl;
+      }
+      else
+      {
+        sBST.insert(x);
+        cout << "Student has been successfully added" << endl;
+        if(fBST.contains(y))
+        {
+          fBST.retrieve(y).advisees.insertFront(id);
+        }
+        else
+        {
+          cin.clear();
+        }
+      }
     }
 
     //------------------- 8 -------------------
+    //Deletes student from BST
     void deleteStudent(int id)
     {
       Student x = Student(id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000);
@@ -156,6 +186,7 @@ class Database
     }
 
     //------------------- 9 -------------------
+    //Adds faculty to BST
     void addFaculty()
     {
       int id;
@@ -164,8 +195,6 @@ class Database
       string department;
       DoublyLinkedList advisees;
       int advisee;
-
-      save();
 
       cout << "ADD NEW FACULTY" << endl;
       cout << "What is the faculty's id? ... ";
@@ -184,13 +213,22 @@ class Database
         advisees.insertFront(advisee);
         cout << "Enter another id or type any letter to finish ... ";
       }
-      fBST.insert(Faculty(id, name, level, department, advisees));
-      cout << "Faculty has been successfully added" << endl;
-      cin.ignore();
-      cin.clear();
+      Faculty x = Faculty(id, name, level, department, advisees);
+      if(fBST.contains(x))
+      {
+        cout << "\nFaculty with id: " << id << " already exists!" << endl;
+      }
+      else
+      {
+        fBST.insert(x);
+        cout << "Faculty has been successfully added" << endl;
+        cin.ignore();
+        cin.clear();
+      }
     }
 
     //------------------- 10 -------------------
+    //Deletes faculty from BST
     void deleteFaculty(int id)
     {
       Faculty x = (Faculty(id, "irrelevant", "irrelevant", "irrelevant", DoublyLinkedList()));
@@ -206,6 +244,7 @@ class Database
     }
 
     //------------------- 11 -------------------
+    //Changes advisor of student
     void changeAdvisor(int student_id, int faculty_id)
     {
       Student a = Student(student_id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000);
@@ -223,6 +262,7 @@ class Database
     }
 
     //------------------- 12 -------------------
+    //Removes advisee from advisor
     void removeAdvisee(int student_id, int faculty_id)
     {
       Student a = Student(student_id, "irrelevant", "irrelevant", "irrelevant", 0.0, 0000000);
@@ -253,6 +293,7 @@ class Database
       }
     }
     //------------------- 13 -------------------
+    //Rolls back state of BST to one previous
     void rollback()
     {
       // set sBST and fBST to their most recent previous versions
@@ -392,6 +433,7 @@ class Database
     	}
     }
 
+    //Clears tables
     void clearFiles()
     {
       std::ofstream myfile;
@@ -399,16 +441,7 @@ class Database
       myfile.open("facultyTable.txt", std::ofstream::out | std::ofstream::trunc);
     }
 
-    /*void writeFile()
-    {
-      std::ofstream myfile;
-      myfile.open("studentTable.txt", std::ofstream::out | std::ofstream::trunc);
-      if (myfile.is_open())
-      {
-
-      }
-      myfile.close();
-    }*/
+    //Writes student tables to output file
     void recWriteFileS(TreeNode<Student> *node)
     {
       if(node == NULL)
@@ -427,6 +460,7 @@ class Database
       recWriteFileS(node->right);
     }
 
+    //Writes faculty tables to output file
     void recWriteFileF(TreeNode<Faculty> *node)
     {
       if(node == NULL)
@@ -446,6 +480,7 @@ class Database
     }
 
     //------------------- 14 -------------------
+    //Exits database
     void exitProgram()
     {
 
@@ -459,13 +494,11 @@ class Database
     }
 
     //------------------------------------------
+    //Runs database
     void Process()
     {
-
       //read from file and create BST
       readFile();
-      //save();
-
 
       int response;
       int id;
@@ -575,7 +608,6 @@ class Database
         {
           cin.clear();
           cin.ignore(numeric_limits<streamsize>::max(), '\n'); //https://stackoverflow.com/questions/10828937/how-to-make-cin-take-only-numbers
-          cout << "Please enter a valid number" << endl;
         }
       }
     }

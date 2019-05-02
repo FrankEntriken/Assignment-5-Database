@@ -1,3 +1,11 @@
+/*
+Grady Lynch and Frank Entriken
+Student ID: 2297574 and 2298368
+Emails: grlynch@chapman.edu and entriken@chapman.edu
+CPSC 350-01
+Assignment 5 - Database
+*/
+
 #include <iostream>
 
 using namespace std;
@@ -68,71 +76,5 @@ struct Student
     ~Student()
     {
 
-    }
-
-    //--------------------------------------------------------------------------------
-    int getId()
-    {
-      return id;
-    }
-
-    void setId(int i)
-    {
-      id = i;
-    }
-
-    //--------------------------------------------------------------------------------
-    string getName()
-    {
-      return name;
-    }
-
-    void setName(string n)
-    {
-      name = n;
-    }
-
-    //--------------------------------------------------------------------------------
-    string getGrade()
-    {
-      return grade;
-    }
-
-    void setGrade(string g)
-    {
-      grade = g;
-    }
-
-    //--------------------------------------------------------------------------------
-    string getMajor()
-    {
-      return major;
-    }
-
-    void setMajor(string m)
-    {
-      major = m;
-    }
-
-    //--------------------------------------------------------------------------------
-    double getGpa()
-    {
-      return gpa;
-    }
-
-    void setGpa(double g)
-    {
-      gpa = g;
-    }
-
-    //--------------------------------------------------------------------------------
-    int getAdvisor()
-    {
-      return advisor;
-    }
-
-    void setAdvisor(int a)
-    {
-      advisor = a;
     }
 };
