@@ -8,8 +8,6 @@ Assignment 5 - Database
 
 #include <iostream>
 #include "BST.h"
-#include "Student.h"
-#include "Faculty.h"
 #include<limits>
 #include <fstream>
 
