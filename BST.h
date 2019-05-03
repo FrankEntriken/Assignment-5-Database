@@ -8,6 +8,8 @@ Assignment 5 - Database
 
 #include <iostream>
 #include "TreeNode.h"
+#include "Student.h"
+#include "Faculty.h"
 
 using namespace std;
 
@@ -41,7 +43,10 @@ struct BST
         return;
 
       recPrint(node->left);
-      cout << node->data << endl;
+      if(node->data.id != 0)
+      {
+        cout << node->data << endl;
+      }
       recPrint(node->right);
     }
 
@@ -140,7 +145,6 @@ struct BST
 
       //at this point we found our node
       //now lets check our cases
-
       if(current->left == NULL && current->right == NULL) //no children, leaf node
       {
         if(current == root)
